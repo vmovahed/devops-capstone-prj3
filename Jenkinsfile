@@ -1,6 +1,6 @@
 node {
-    def application = 'springbootapp'
-    def dockerhubaccountid = 'vmovahed'
+    application = 'springbootapp'
+    dockerhubaccountid = 'aliabolhassani'
 
     stage('Clone Repository') {
         checkout scm
@@ -10,11 +10,11 @@ node {
         sh('(docker container rm -f $(docker ps -a -q)) || true')
     }
 
-    stage('Running my Unit Tet') {
+    stage('Run Unit Tets') {
         sh('./mvnw test')
     }
 
-    stage('Building the Artifact') {
+    stage('Build the Artifact') {
         sh('./mvnw clean package')
     }
 
@@ -30,7 +30,7 @@ node {
     }
 
     stage('Deploy') {
-        sh("docker run -d -p 81:8080 -v /var/log/:/var/log/ ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
+        sh("docker run -d -p 80:8080 -v /var/log/:/var/log/ ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
     }
 
     stage('Remove Old Images') {
